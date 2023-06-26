@@ -105,11 +105,11 @@ impl<'a> Serializer for &'a mut Encoder {
     }
 
     fn serialize_none(self) -> EncodeResult<Self::Ok> {
-        no_impl!("serialize_none")
+        Ok(())
     }
 
-    fn serialize_some<T: ?Sized + Serialize>(self, _value: &T) -> EncodeResult<Self::Ok> {
-        no_impl!("serialize_some")
+    fn serialize_some<T: ?Sized + Serialize>(self, value: &T) -> EncodeResult<Self::Ok> {
+        value.serialize(self)
     }
 
     fn serialize_unit(self) -> EncodeResult<Self::Ok> {
