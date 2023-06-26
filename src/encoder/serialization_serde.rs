@@ -106,7 +106,8 @@ impl<'a, Tr: AsRef<Transaction>> Serializer for &'a mut Encoder<Tr> {
     }
 
     fn serialize_none(self) -> EncodeResult<Self::Ok> {
-        Ok(())
+        // Delete the value if it currently exists
+        emit_value!(self)
     }
 
     fn serialize_some<T: ?Sized + Serialize>(self, value: &T) -> EncodeResult<Self::Ok> {
