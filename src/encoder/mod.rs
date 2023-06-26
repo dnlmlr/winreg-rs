@@ -20,6 +20,18 @@ macro_rules! emit_value {
             Start => Err(EncoderError::NoFieldName),
         }
     };
+    ($s:ident) => {
+        match mem::replace(&mut $s.state, Start) {
+            NextKey(ref s) => match $s.keys[$s.keys.len() - 1].delete_value(s) {
+                Ok(()) => Ok(()),
+                Err(e) => match e.kind() {
+                    std::io::ErrorKind::NotFound => Ok(()),
+                    e => Err(EncoderError::IoError(e.into())),
+                },
+            },
+            Start => Err(EncoderError::NoFieldName),
+        }
+    };
 }
 
 macro_rules! no_impl {
